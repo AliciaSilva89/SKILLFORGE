@@ -1,14 +1,23 @@
-# Use uma imagem base do OpenJDK
-FROM openjdk:17-jdk-alpine
+# Usar uma imagem base do Maven com JDK
+FROM maven:3.8.4-openjdk-17-slim AS build
 
-# Defina o diretório de trabalho no contêiner
+# Definir o diretório de trabalho dentro do contêiner
 WORKDIR /app
 
-# Copie o arquivo JAR do seu projeto para o contêiner
-COPY target/SkillForge-0.0.1-SNAPSHOT.jar app.jar
+# Copiar o arquivo de configuração do Maven
+COPY pom.xml .
 
-# Exponha a porta que a aplicação irá rodar
-EXPOSE 8080
+# Baixar as dependências do projeto (isso é armazenado em cache para builds futuros)
+RUN mvn dependency:go-offline
 
-# Comando para executar a aplicação
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Copiar o restante do projeto para o contêiner
+COPY src/ ./src/
+
+# Compilar o projeto e gerar o JAR
+RUN mvn package -DskipTests
+
+# Usar uma imagem leve do JDK para a execução
+FROM openjdk:17-jdk-slim
+
+# Definir o diretório de trabalho
+WORKDIR /app
