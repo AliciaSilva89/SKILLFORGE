@@ -7,7 +7,6 @@ Este projeto foi desenvolvido com o objetivo de criar uma aplicação robusta e 
 
 Hard Skills: Um sistema para teste de habilidades técnicas de programação.
 Soft Skills: Um jogo interativo que aborda diversidade e inclusão.
-Registro de Ponto: Um sistema para trabalhadores remotos registrarem seus horários de trabalho.
 
 A aplicação utiliza uma arquitetura baseada em micro serviços, com um backend desenvolvido em Java e um BFF em python, com o frontend em React, além de um banco de dados relacional para armazenamento de informações.
 
@@ -53,6 +52,7 @@ Gerenciamento de Dependências: pip e venv
 Hospedagem: AWS EC2
 Servidor de Aplicação: Uvicorn
 Proxy Reverso (opcional): Nginx
+Hospedagem: Container Docker em uma instância EC2 da AWS.
 
 Banco de Dados
 Sistema Gerenciador de Banco de Dados (SGBD): PostgreSQL
@@ -74,3 +74,7 @@ As respostas são enviadas de volta ao python que manda para o frontend, que exi
 
 Diagrama de Arquitetura
 [Usuário] → [Frontend (React)] → [BFF[(Python)] → [Backend (FastAPI)] → [Banco de Dados (PostgreSQL)]
+
+Contêinerização
+Todos os componentes do backend (BFF e backend principal) foram empacotados em containers Docker para garantir portabilidade e consistência no ambiente de execução.
+O uso de contêineres facilita o gerenciamento e a escalabilidade da aplicação, permitindo que os serviços sejam implantados de forma independente.
