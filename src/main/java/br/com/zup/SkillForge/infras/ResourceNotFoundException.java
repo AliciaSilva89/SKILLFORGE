@@ -1,4 +1,4 @@
-package br.com.zup.infras;
+package br.com.zup.SkillForge.infras;
 
 public class ResourceNotFoundException extends RuntimeException {
 
