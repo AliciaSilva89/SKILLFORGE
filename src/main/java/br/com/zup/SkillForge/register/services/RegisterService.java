@@ -5,7 +5,7 @@ import br.com.zup.SkillForge.infras.ResourceNotFoundException;
 import br.com.zup.SkillForge.register.models.User;
 import br.com.zup.SkillForge.register.dtos.UserRequestDTO;
 import br.com.zup.SkillForge.register.dtos.UserResponseDTO;
-import br.com.zup.SkillForge.register.repositories.UserRepository;
+import br.com.zup.SkillForge.register.repositories.RegisterRepository;
 import br.com.zup.SkillForge.register.services.mappers.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +16,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class RegisterService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
 
     @Autowired
-    private UserRepository userRepository;
+    private RegisterRepository registerRepository;
 
     @Autowired
     private UserMapper userMapper;
@@ -33,7 +33,7 @@ public class UserService {
         }
 
         User user = userMapper.toModel(userRequestDTO);
-        user = userRepository.save(user);
+        user = registerRepository.save(user);
         logger.info("User created with id: {}", user.getId());
         return userMapper.toDto(user);
     }
@@ -44,11 +44,11 @@ public class UserService {
             throw new IllegalArgumentException("Passwords do not match");
         }
 
-        return userRepository.findById(id).map(existingUser -> {
+        return registerRepository.findById(id).map(existingUser -> {
             User updatedUser = userMapper.toModel(userRequestDTO);
             existingUser.setEmail(updatedUser.getEmail());
             existingUser.setPassword(updatedUser.getPassword());
-            User savedUser = userRepository.save(existingUser);
+            User savedUser = registerRepository.save(existingUser);
             logger.info("User updated with id: {}", savedUser.getId());
             return userMapper.toDto(savedUser);
         }).orElseThrow(() -> {
@@ -58,16 +58,16 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
+        if (!registerRepository.existsById(id)) {
             logger.error("User not found with id: {}", id);
             throw new ResourceNotFoundException("User not found with id " + id);
         }
-        userRepository.deleteById(id);
+        registerRepository.deleteById(id);
         logger.info("User deleted with id: {}", id);
     }
 
     public List<UserResponseDTO> listUsers() {
-        List<UserResponseDTO> users = userRepository.findAll().stream()
+        List<UserResponseDTO> users = registerRepository.findAll().stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList());
         logger.info("Listing all users");
@@ -75,7 +75,7 @@ public class UserService {
     }
 
     public UserResponseDTO getUserById(Long id) {
-        return userRepository.findById(id)
+        return registerRepository.findById(id)
                 .map(userMapper::toDto)
                 .orElseThrow(() -> {
                     logger.error("User not found with id: {}", id);
