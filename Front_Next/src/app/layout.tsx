@@ -29,6 +29,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <head>
         {/* Você pode adicionar mais tags aqui, como <meta> ou <link> */}
+        <link rel="icon" href="./SFlogo.svg" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#003F5C] text-white`} // Adicionando tema escuro para o projeto SkillForge
