@@ -1,4 +1,4 @@
-package br.com.zup.softSkill.models;
+package br.com.zup.SkillForge.softSkill.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

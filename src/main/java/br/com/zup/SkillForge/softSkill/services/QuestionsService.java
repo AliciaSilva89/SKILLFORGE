@@ -1,11 +1,11 @@
-package br.com.zup.softSkill.services;
+package br.com.zup.SkillForge.softSkill.services;
 
-import br.com.zup.infras.ResourceNotFoundException;
-import br.com.zup.softSkill.dtos.QuestionsRequestDTO;
-import br.com.zup.softSkill.dtos.QuestionsResponseDTO;
-import br.com.zup.softSkill.services.mappers.QuestionsMapper;
-import br.com.zup.softSkill.models.Questions;
-import br.com.zup.softSkill.repositories.QuestionsRepository;
+import br.com.zup.SkillForge.infras.ResourceNotFoundException;
+import br.com.zup.SkillForge.softSkill.dtos.QuestionsRequestDTO;
+import br.com.zup.SkillForge.softSkill.dtos.QuestionsResponseDTO;
+import br.com.zup.SkillForge.softSkill.services.mappers.QuestionsMapper;
+import br.com.zup.SkillForge.softSkill.models.Questions;
+import br.com.zup.SkillForge.softSkill.repositories.QuestionsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

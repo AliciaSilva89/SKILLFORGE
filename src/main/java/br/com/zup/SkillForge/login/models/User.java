@@ -1,4 +1,4 @@
-package br.com.zup.SkillForge.login;
+package br.com.zup.SkillForge.login.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
