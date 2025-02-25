@@ -1,8 +1,8 @@
-package br.com.zup.softSkill.services.mappers;
+package br.com.zup.SkillForge.softSkill.services.mappers;
 
-import br.com.zup.softSkill.dtos.QuestionsRequestDTO;
-import br.com.zup.softSkill.dtos.QuestionsResponseDTO;
-import br.com.zup.softSkill.models.Questions;
+import br.com.zup.SkillForge.softSkill.dtos.QuestionsRequestDTO;
+import br.com.zup.SkillForge.softSkill.dtos.QuestionsResponseDTO;
+import br.com.zup.SkillForge.softSkill.models.Questions;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

@@ -1,9 +1,9 @@
 package br.com.zup.SkillForge.registerTest;
 
-import br.com.zup.SkillForge.register.controllers.UserController;
+import br.com.zup.SkillForge.register.controllers.RegisterController;
 import br.com.zup.SkillForge.register.dtos.UserRequestDTO;
 import br.com.zup.SkillForge.register.dtos.UserResponseDTO;
-import br.com.zup.SkillForge.register.services.UserService;
+import br.com.zup.SkillForge.register.services.RegisterService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,13 +22,13 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-class UserControllerTest {
+class RegisterControllerTest {
 
     @InjectMocks
-    private UserController userController;
+    private RegisterController userController;
 
     @Mock
-    private UserService userService;
+    private RegisterService registerService;
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
@@ -45,7 +45,7 @@ class UserControllerTest {
         UserRequestDTO requestDTO = new UserRequestDTO("user@example.com", "password123", "password123");
         UserResponseDTO responseDTO = new UserResponseDTO(1L, "user@example.com");
 
-        when(userService.createUser(any(UserRequestDTO.class))).thenReturn(responseDTO);
+        when(registerService.createUser(any(UserRequestDTO.class))).thenReturn(responseDTO);
 
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -61,7 +61,7 @@ class UserControllerTest {
         UserRequestDTO requestDTO = new UserRequestDTO("user@example.com", "newPassword123", "newPassword123");
         UserResponseDTO responseDTO = new UserResponseDTO(userId, "user@example.com");
 
-        when(userService.updateUser(eq(userId), any(UserRequestDTO.class))).thenReturn(responseDTO);
+        when(registerService.updateUser(eq(userId), any(UserRequestDTO.class))).thenReturn(responseDTO);
 
         mockMvc.perform(put("/users/{id}", userId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -76,7 +76,7 @@ class UserControllerTest {
         Long userId = 1L;
         UserResponseDTO responseDTO = new UserResponseDTO(userId, "user@example.com");
 
-        when(userService.getUserById(eq(userId))).thenReturn(responseDTO);
+        when(registerService.getUserById(eq(userId))).thenReturn(responseDTO);
 
         mockMvc.perform(get("/users/{id}", userId))
                 .andExpect(status().isOk())
@@ -90,7 +90,7 @@ class UserControllerTest {
         UserResponseDTO user2 = new UserResponseDTO(2L, "user2@example.com");
         List<UserResponseDTO> userList = List.of(user1, user2);
 
-        when(userService.listUsers()).thenReturn(userList);
+        when(registerService.listUsers()).thenReturn(userList);
 
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
@@ -104,11 +104,11 @@ class UserControllerTest {
     void testDeleteUser() throws Exception {
         Long userId = 1L;
 
-        doNothing().when(userService).deleteUser(eq(userId));
+        doNothing().when(registerService).deleteUser(eq(userId));
 
         mockMvc.perform(delete("/users/{id}", userId))
                 .andExpect(status().isNoContent());
 
-        verify(userService, times(1)).deleteUser(eq(userId));
+        verify(registerService, times(1)).deleteUser(eq(userId));
     }
 }

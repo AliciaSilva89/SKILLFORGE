@@ -1,37 +1,30 @@
-package br.com.zup.SkillForge.register.services;
-
+package br.com.zup.SkillForge.login.services;
 
 import br.com.zup.SkillForge.infras.ResourceNotFoundException;
-import br.com.zup.SkillForge.register.models.User;
-import br.com.zup.SkillForge.register.dtos.UserRequestDTO;
-import br.com.zup.SkillForge.register.dtos.UserResponseDTO;
-import br.com.zup.SkillForge.register.repositories.UserRepository;
-import br.com.zup.SkillForge.register.services.mappers.UserMapper;
+import br.com.zup.SkillForge.login.dtos.UserRequestDTO;
+import br.com.zup.SkillForge.login.dtos.UserResponseDTO;
+import br.com.zup.SkillForge.login.models.User;
+import br.com.zup.SkillForge.login.repositories.LoginRepository;
+import br.com.zup.SkillForge.login.services.mappers.LoginMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
-public class UserService {
+public class LoginService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
 
-    @Autowired
-    private UserRepository userRepository;
+    private LoginRepository userRepository;
+    private LoginMapper userMapper;
 
-    @Autowired
-    private UserMapper userMapper;
+    public LoginService(LoginRepository userRepository, LoginMapper userMapper) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+    }
 
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
-        if (!userRequestDTO.isPasswordsEqual()) {
-            logger.error("Password and confirmation do not match for user with email: {}", userRequestDTO.getEmail());
-            throw new IllegalArgumentException("Passwords do not match");
-        }
-
         User user = userMapper.toModel(userRequestDTO);
         user = userRepository.save(user);
         logger.info("User created with id: {}", user.getId());
@@ -39,10 +32,6 @@ public class UserService {
     }
 
     public UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
-        if (!userRequestDTO.isPasswordsEqual()) {
-            logger.error("Password and confirmation do not match for user with email: {}", userRequestDTO.getEmail());
-            throw new IllegalArgumentException("Passwords do not match");
-        }
 
         return userRepository.findById(id).map(existingUser -> {
             User updatedUser = userMapper.toModel(userRequestDTO);
@@ -83,3 +72,4 @@ public class UserService {
                 });
     }
 }
+
