@@ -1,7 +1,7 @@
 package br.com.zup.SkillForge.login.controllers;
 
-import br.com.zup.SkillForge.login.dtos.UserRequestDTO;
-import br.com.zup.SkillForge.login.dtos.UserResponseDTO;
+import br.com.zup.SkillForge.login.dtos.LoginUserRequestDTO;
+import br.com.zup.SkillForge.login.dtos.LoginUserResponseDTO;
 import br.com.zup.SkillForge.login.services.LoginService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -21,30 +21,30 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> create(@RequestBody @Valid UserRequestDTO requestDTO) {
-        UserResponseDTO responseDTO = loginService.createUser(requestDTO);
+    public ResponseEntity<LoginUserResponseDTO> create(@RequestBody @Valid LoginUserRequestDTO requestDTO) {
+        LoginUserResponseDTO responseDTO = loginService.createUser(requestDTO);
         logger.info("User created with email: {}", requestDTO.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> update(@PathVariable Long id, @RequestBody @Valid UserRequestDTO requestDTO) {
+    public ResponseEntity<LoginUserResponseDTO> update(@PathVariable Long id, @RequestBody @Valid LoginUserRequestDTO requestDTO) {
 
-        UserResponseDTO responseDTO = loginService.updateUser(id, requestDTO);
+        LoginUserResponseDTO responseDTO = loginService.updateUser(id, requestDTO);
         logger.info("User updated with id: {}", id);
         return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> listUsers() {
-        List<UserResponseDTO> responseDTOList = loginService.listUsers();
+    public ResponseEntity<List<LoginUserResponseDTO>> listUsers() {
+        List<LoginUserResponseDTO> responseDTOList = loginService.listUsers();
         logger.info("Listing all users");
         return ResponseEntity.ok(responseDTOList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
-        UserResponseDTO responseDTO = loginService.getUserById(id);
+    public ResponseEntity<LoginUserResponseDTO> getUserById(@PathVariable Long id) {
+        LoginUserResponseDTO responseDTO = loginService.getUserById(id);
         logger.info("Fetching user with id: {}", id);
         return ResponseEntity.ok(responseDTO);
     }
