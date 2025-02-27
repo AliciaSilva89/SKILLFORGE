@@ -6,7 +6,6 @@ import br.com.zup.SkillForge.register.services.RegisterService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +18,15 @@ public class RegisterController {
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
 
-    @Autowired
-    private RegisterService registerService;
+    private final RegisterService registerService;
+
+    public RegisterController(RegisterService registerService) {
+        this.registerService = registerService;
+    }
 
     @PostMapping
     public ResponseEntity<RegisterUserResponseDTO> create(@RequestBody @Valid RegisterUserRequestDTO requestDTO) {
         if (!requestDTO.isPasswordsEqual()) {
-            logger.error("Password and confirmation do not match for user with email: {}", requestDTO.getEmail());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         RegisterUserResponseDTO responseDTO = registerService.createUser(requestDTO);

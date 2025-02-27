@@ -27,7 +27,7 @@ public class RegisterUserRequestDTO {
 
     @AssertTrue(message = "Passwords do not match.")
     public boolean isPasswordsEqual() {
-        return password != null && password.equals(confirmPassword);
+        return password != null && confirmPassword != null && password.equals(confirmPassword);
     }
 
     private RegisterUserRequestDTO(Builder builder) {
