@@ -11,18 +11,15 @@ public class LoginUserResponseDTO {
 
     private Long id;
     private String email;
-    private String token;
 
     private LoginUserResponseDTO(Builder builder) {
         this.id = builder.id;
         this.email = builder.email;
-        this.token = builder.token;
     }
 
     public static class Builder {
         private Long id;
         private String email;
-        private String token;
 
         public Builder id(Long id) {
             this.id = id;
@@ -31,11 +28,6 @@ public class LoginUserResponseDTO {
 
         public Builder email(String email) {
             this.email = email;
-            return this;
-        }
-
-        public Builder token(String token) {
-            this.token = token;
             return this;
         }
 

@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "Login")
 public class LoginUser {
 
     @Id
@@ -21,10 +20,7 @@ public class LoginUser {
     @NotEmpty(message = "Password cannot be empty.")
     private String password;
 
-    public LoginUser() {}
+    public LoginUser() {
 
-    public LoginUser(String email, String password) {
-        this.email = email;
-        this.password = password;
     }
 }
