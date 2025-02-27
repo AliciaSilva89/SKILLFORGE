@@ -15,6 +15,42 @@ const Home: React.FC = () => {
     router.push(`/game?title=${title}`);
   };
 
+  const softSkillsButtons = [
+    "Empatia",
+    "Comunicacao inclusiva",
+    "Pessoas negras",
+    "Respeito as diferencas",
+    "Vies Inconsciente",
+    "Interseccionalidade",
+    "Diversidade Cultural",
+    "Equidade De Genero",
+    "Inclusao De PCD",
+    "Racial E Etnica",
+    "LGBTQIA E Inclusao",
+    "Socioeconomica",
+    "Religiao E Espiritualidade",
+    "Saude Mental E Inclusao",
+  ];
+
+  const hardSkillsButtons = [
+    "Funções Simples",
+    "Comentários Necessários",
+    "Código Legível",
+  ];
+
+  const renderButtons = (buttons: string[]) => {
+    return buttons.map((title) => (
+      <Button
+        key={title}
+        className="bg-[#00B4D8] text-white w-[250px] h-[50px] rounded-[10px] text-lg px-3 hover:bg-[#009ec3]"
+        onClick={() => handleGameStart(title)}
+        aria-label={`Iniciar jogo de ${title}`}
+      >
+        {title}
+      </Button>
+    ));
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col relative">
       <Navbar />
@@ -46,27 +82,7 @@ const Home: React.FC = () => {
               Soft Skills - Diversidade e Inclusão
             </h2>
             <div className="flex flex-wrap justify-center gap-6 md:gap-8">
-              <Button
-                className="bg-[#00B4D8] text-white w-[250px] h-[50px] rounded-[10px] text-lg px-3 hover:bg-[#009ec3]"
-                onClick={() => handleGameStart("Empatia")}
-                aria-label="Iniciar jogo de Empatia"
-              >
-                Empatia
-              </Button>
-              <Button
-                className="bg-[#00B4D8] text-white w-[250px] h-[50px] rounded-[10px] text-lg px-3 hover:bg-[#009ec3]"
-                onClick={() => handleGameStart("Comunicação Inclusiva")}
-                aria-label="Iniciar jogo de Comunicação Inclusiva"
-              >
-                Comunicação Inclusiva
-              </Button>
-              <Button
-                className="bg-[#00B4D8] text-white w-[250px] h-[50px] rounded-[10px] text-lg px-3 hover:bg-[#009ec3]"
-                onClick={() => handleGameStart("Respeito às Diferenças")}
-                aria-label="Iniciar jogo de Respeito às Diferenças"
-              >
-                Respeito às Diferenças
-              </Button>
+              {renderButtons(softSkillsButtons)}
             </div>
           </div>
         )}
@@ -77,27 +93,7 @@ const Home: React.FC = () => {
               Hard Skills - Clean Code
             </h2>
             <div className="flex flex-wrap justify-center gap-6 md:gap-8">
-              <Button
-                className="bg-[#00B4D8] text-white w-[250px] h-[50px] rounded-[10px] text-lg px-3 hover:bg-[#009ec3]"
-                onClick={() => handleGameStart("Funções Simples")}
-                aria-label="Iniciar jogo de Funções Simples"
-              >
-                Funções Simples
-              </Button>
-              <Button
-                className="bg-[#00B4D8] text-white w-[250px] h-[50px] rounded-[10px] text-lg px-3 hover:bg-[#009ec3]"
-                onClick={() => handleGameStart("Comentários Necessários")}
-                aria-label="Iniciar jogo de Comentários Necessários"
-              >
-                Comentários Necessários
-              </Button>
-              <Button
-                className="bg-[#00B4D8] text-white w-[250px] h-[50px] rounded-[10px] text-lg px-3 hover:bg-[#009ec3]"
-                onClick={() => handleGameStart("Código Legível")}
-                aria-label="Iniciar jogo de Código Legível"
-              >
-                Código Legível
-              </Button>
+              {renderButtons(hardSkillsButtons)}
             </div>
           </div>
         )}
