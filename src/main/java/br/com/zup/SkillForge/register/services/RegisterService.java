@@ -8,7 +8,6 @@ import br.com.zup.SkillForge.register.repositories.RegisterRepository;
 import br.com.zup.SkillForge.register.services.mappers.RegisterMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,16 +21,13 @@ public class RegisterService {
     private final RegisterRepository registerRepository;
     private final RegisterMapper registerMapper;
 
-    @Autowired
     public RegisterService(RegisterRepository registerRepository, RegisterMapper registerMapper) {
         this.registerRepository = registerRepository;
         this.registerMapper = registerMapper;
     }
 
     public RegisterUserResponseDTO createUser(RegisterUserRequestDTO registerUserRequestDTO) {
-        if (!registerUserRequestDTO.isPasswordsEqual()) {
-            throw new IllegalArgumentException("Passwords do not match");
-        }
+        validatePasswords(registerUserRequestDTO);
 
         RegisterUser registerUser = registerMapper.toModel(registerUserRequestDTO);
         registerUser = registerRepository.save(registerUser);
@@ -40,16 +36,12 @@ public class RegisterService {
     }
 
     public RegisterUserResponseDTO updateUser(Long id, RegisterUserRequestDTO registerUserRequestDTO) {
-        if (!registerUserRequestDTO.isPasswordsEqual()) {
-            logger.error("Password and confirmation do not match for user with email: {}", registerUserRequestDTO.getEmail());
-            throw new IllegalArgumentException("Passwords do not match");
-        }
+        validatePasswords(registerUserRequestDTO);
 
         return registerRepository.findById(id)
                 .map(existingRegisterUser -> {
-                    RegisterUser updatedRegisterUser = registerMapper.toModel(registerUserRequestDTO);
-                    existingRegisterUser.setEmail(updatedRegisterUser.getEmail());
-                    existingRegisterUser.setPassword(updatedRegisterUser.getPassword());
+                    existingRegisterUser.setEmail(registerUserRequestDTO.getEmail());
+                    existingRegisterUser.setPassword(registerUserRequestDTO.getPassword());
                     RegisterUser savedRegisterUser = registerRepository.save(existingRegisterUser);
                     logger.info("User updated with id: {}", savedRegisterUser.getId());
                     return registerMapper.toDto(savedRegisterUser);
@@ -59,6 +51,7 @@ public class RegisterService {
 
     public void deleteUser(Long id) {
         if (!registerRepository.existsById(id)) {
+            logger.error("Attempted to delete non-existent user with id: {}", id);
             throw new ResourceNotFoundException("User not found with id " + id);
         }
         registerRepository.deleteById(id);
@@ -69,7 +62,7 @@ public class RegisterService {
         List<RegisterUserResponseDTO> users = registerRepository.findAll().stream()
                 .map(registerMapper::toDto)
                 .collect(Collectors.toList());
-        logger.info("Listing all users");
+        logger.info("Listing all users, total: {}", users.size());
         return users;
     }
 
@@ -80,5 +73,12 @@ public class RegisterService {
                     logger.error("User not found with id: {}", id);
                     return new ResourceNotFoundException("User not found with id " + id);
                 });
+    }
+
+    private void validatePasswords(RegisterUserRequestDTO registerUserRequestDTO) {
+        if (!registerUserRequestDTO.isPasswordsEqual()) {
+            logger.error("Password and confirmation do not match for user with email: {}", registerUserRequestDTO.getEmail());
+            throw new IllegalArgumentException("Passwords do not match");
+        }
     }
 }

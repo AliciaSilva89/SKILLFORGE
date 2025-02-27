@@ -3,14 +3,27 @@ package br.com.zup.SkillForge.softSkill.services.mappers;
 import br.com.zup.SkillForge.softSkill.dtos.QuestionsRequestDTO;
 import br.com.zup.SkillForge.softSkill.dtos.QuestionsResponseDTO;
 import br.com.zup.SkillForge.softSkill.models.Questions;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
-@Mapper
-public interface QuestionsMapper {
-    QuestionsMapper INSTANCE = Mappers.getMapper(QuestionsMapper.class);
+@Component
+public class QuestionsMapper {
 
-    Questions toModel(QuestionsRequestDTO dto);
+    public Questions toModel(QuestionsRequestDTO dto) {
+        Questions questions = new Questions();
+        questions.setTitle(dto.getTitle());
+        questions.setOptionA(dto.getOptionA());
+        questions.setOptionB(dto.getOptionB());
+        questions.setOptionC(dto.getOptionC());
+        return questions;
+    }
 
-    QuestionsResponseDTO toDto(Questions questions);
+    public QuestionsResponseDTO toDto(Questions questions) {
+        QuestionsResponseDTO dto = new QuestionsResponseDTO();
+        dto.setId(questions.getId());
+        dto.setTitle(questions.getTitle());
+        dto.setOptionA(questions.getOptionA());
+        dto.setOptionB(questions.getOptionB());
+        dto.setOptionC(questions.getOptionC());
+        return dto;
+    }
 }

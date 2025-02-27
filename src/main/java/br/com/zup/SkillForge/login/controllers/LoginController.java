@@ -16,9 +16,13 @@ import java.util.List;
 @RequestMapping("/login")
 public class LoginController {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    private LoginService loginService;
+    private final  LoginService loginService;
+
+    public LoginController(LoginService loginService) {
+        this.loginService = loginService;
+    }
 
     @PostMapping
     public ResponseEntity<LoginUserResponseDTO> create(@RequestBody @Valid LoginUserRequestDTO requestDTO) {

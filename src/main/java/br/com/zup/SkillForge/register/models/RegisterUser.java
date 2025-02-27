@@ -1,7 +1,6 @@
 package br.com.zup.SkillForge.register.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -28,16 +27,6 @@ public class RegisterUser {
     @NotEmpty(message = "Password confirmation cannot be empty")
     private String confirmPassword;
 
-    @AssertTrue(message = "Passwords do not match")
-    public boolean isPasswordsEqual() {
-        return password != null && password.equals(confirmPassword);
-    }
-
     public RegisterUser() {}
 
-    public RegisterUser(String email, String password, String confirmPassword) {
-        this.email = email;
-        this.password = password;
-        this.confirmPassword = confirmPassword;
-    }
 }

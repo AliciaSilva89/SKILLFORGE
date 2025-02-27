@@ -3,15 +3,22 @@ package br.com.zup.SkillForge.login.services.mappers;
 import br.com.zup.SkillForge.login.dtos.LoginUserRequestDTO;
 import br.com.zup.SkillForge.login.dtos.LoginUserResponseDTO;
 import br.com.zup.SkillForge.login.models.LoginUser;
-import br.com.zup.SkillForge.register.services.mappers.RegisterMapper;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
-@Mapper
-public interface LoginMapper {
-    RegisterMapper INSTANCE = Mappers.getMapper(RegisterMapper.class);
+@Component
+public class LoginMapper {
 
-    LoginUser toModel(LoginUserRequestDTO dto);
+    public LoginUser toModel(LoginUserRequestDTO dto) {
+        LoginUser loginUser = new LoginUser();
+        loginUser.setEmail(dto.getEmail());
+        loginUser.setPassword(dto.getPassword());
+        return loginUser;
+    }
 
-    LoginUserResponseDTO toDto(LoginUser loginUser);
+    public LoginUserResponseDTO toDto(LoginUser loginUser) {
+        LoginUserResponseDTO dto = new LoginUserResponseDTO();
+        dto.setId(loginUser.getId());
+        dto.setEmail(loginUser.getEmail());
+        return dto;
+    }
 }

@@ -36,10 +36,4 @@ public class Questions {
     public Questions() {
     }
 
-    public Questions(String title, String optionA, String optionB, String optionC) {
-        this.title = title;
-        this.optionA = optionA;
-        this.optionB = optionB;
-        this.optionC = optionC;
-    }
 }

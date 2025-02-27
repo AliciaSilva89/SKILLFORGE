@@ -4,7 +4,6 @@ import br.com.zup.SkillForge.softSkill.dtos.QuestionsRequestDTO;
 import br.com.zup.SkillForge.softSkill.dtos.QuestionsResponseDTO;
 import br.com.zup.SkillForge.softSkill.services.QuestionsService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +14,11 @@ import java.util.List;
 @RequestMapping("/inclusion-questions")
 public class QuestionsController {
 
-    @Autowired
-    private QuestionsService questionsService;
+    private final QuestionsService questionsService;
+
+    public QuestionsController(QuestionsService questionsService) {
+        this.questionsService = questionsService;
+    }
 
     @PostMapping
     public ResponseEntity<QuestionsResponseDTO> create(@RequestBody @Valid QuestionsRequestDTO requestDTO) {
