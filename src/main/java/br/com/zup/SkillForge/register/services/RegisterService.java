@@ -1,12 +1,11 @@
 package br.com.zup.SkillForge.register.services;
 
-
 import br.com.zup.SkillForge.infras.ResourceNotFoundException;
-import br.com.zup.SkillForge.register.models.User;
-import br.com.zup.SkillForge.register.dtos.UserRequestDTO;
-import br.com.zup.SkillForge.register.dtos.UserResponseDTO;
+import br.com.zup.SkillForge.register.models.RegisterUser;
+import br.com.zup.SkillForge.register.dtos.RegisterUserRequestDTO;
+import br.com.zup.SkillForge.register.dtos.RegisterUserResponseDTO;
 import br.com.zup.SkillForge.register.repositories.RegisterRepository;
-import br.com.zup.SkillForge.register.services.mappers.UserMapper;
+import br.com.zup.SkillForge.register.services.mappers.RegisterMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,63 +19,63 @@ public class RegisterService {
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
 
-    @Autowired
-    private RegisterRepository registerRepository;
+    private final RegisterRepository registerRepository;
+    private final RegisterMapper registerMapper;
 
     @Autowired
-    private UserMapper userMapper;
-
-    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
-        if (!userRequestDTO.isPasswordsEqual()) {
-            logger.error("Password and confirmation do not match for user with email: {}", userRequestDTO.getEmail());
-            throw new IllegalArgumentException("Passwords do not match");
-        }
-
-        User user = userMapper.toModel(userRequestDTO);
-        user = registerRepository.save(user);
-        logger.info("User created with id: {}", user.getId());
-        return userMapper.toDto(user);
+    public RegisterService(RegisterRepository registerRepository, RegisterMapper registerMapper) {
+        this.registerRepository = registerRepository;
+        this.registerMapper = registerMapper;
     }
 
-    public UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
-        if (!userRequestDTO.isPasswordsEqual()) {
-            logger.error("Password and confirmation do not match for user with email: {}", userRequestDTO.getEmail());
+    public RegisterUserResponseDTO createUser(RegisterUserRequestDTO registerUserRequestDTO) {
+        if (!registerUserRequestDTO.isPasswordsEqual()) {
             throw new IllegalArgumentException("Passwords do not match");
         }
 
-        return registerRepository.findById(id).map(existingUser -> {
-            User updatedUser = userMapper.toModel(userRequestDTO);
-            existingUser.setEmail(updatedUser.getEmail());
-            existingUser.setPassword(updatedUser.getPassword());
-            User savedUser = registerRepository.save(existingUser);
-            logger.info("User updated with id: {}", savedUser.getId());
-            return userMapper.toDto(savedUser);
-        }).orElseThrow(() -> {
-            logger.error("User not found with id: {}", id);
-            return new ResourceNotFoundException("User not found with id " + id);
-        });
+        RegisterUser registerUser = registerMapper.toModel(registerUserRequestDTO);
+        registerUser = registerRepository.save(registerUser);
+        logger.info("User created with id: {}", registerUser.getId());
+        return registerMapper.toDto(registerUser);
+    }
+
+    public RegisterUserResponseDTO updateUser(Long id, RegisterUserRequestDTO registerUserRequestDTO) {
+        if (!registerUserRequestDTO.isPasswordsEqual()) {
+            logger.error("Password and confirmation do not match for user with email: {}", registerUserRequestDTO.getEmail());
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+
+        return registerRepository.findById(id)
+                .map(existingRegisterUser -> {
+                    RegisterUser updatedRegisterUser = registerMapper.toModel(registerUserRequestDTO);
+                    existingRegisterUser.setEmail(updatedRegisterUser.getEmail());
+                    existingRegisterUser.setPassword(updatedRegisterUser.getPassword());
+                    RegisterUser savedRegisterUser = registerRepository.save(existingRegisterUser);
+                    logger.info("User updated with id: {}", savedRegisterUser.getId());
+                    return registerMapper.toDto(savedRegisterUser);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
     }
 
     public void deleteUser(Long id) {
         if (!registerRepository.existsById(id)) {
-            logger.error("User not found with id: {}", id);
             throw new ResourceNotFoundException("User not found with id " + id);
         }
         registerRepository.deleteById(id);
         logger.info("User deleted with id: {}", id);
     }
 
-    public List<UserResponseDTO> listUsers() {
-        List<UserResponseDTO> users = registerRepository.findAll().stream()
-                .map(userMapper::toDto)
+    public List<RegisterUserResponseDTO> listUsers() {
+        List<RegisterUserResponseDTO> users = registerRepository.findAll().stream()
+                .map(registerMapper::toDto)
                 .collect(Collectors.toList());
         logger.info("Listing all users");
         return users;
     }
 
-    public UserResponseDTO getUserById(Long id) {
+    public RegisterUserResponseDTO getUserById(Long id) {
         return registerRepository.findById(id)
-                .map(userMapper::toDto)
+                .map(registerMapper::toDto)
                 .orElseThrow(() -> {
                     logger.error("User not found with id: {}", id);
                     return new ResourceNotFoundException("User not found with id " + id);

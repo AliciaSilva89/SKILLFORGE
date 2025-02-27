@@ -1,16 +1,24 @@
 package br.com.zup.SkillForge.register.services.mappers;
 
-import br.com.zup.SkillForge.register.dtos.UserRequestDTO;
-import br.com.zup.SkillForge.register.dtos.UserResponseDTO;
-import br.com.zup.SkillForge.register.models.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import br.com.zup.SkillForge.register.dtos.RegisterUserRequestDTO;
+import br.com.zup.SkillForge.register.dtos.RegisterUserResponseDTO;
+import br.com.zup.SkillForge.register.models.RegisterUser;
+import org.springframework.stereotype.Component;
 
-@Mapper
-public interface UserMapper {
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+@Component
+public class RegisterMapper {
 
-    User toModel(UserRequestDTO dto);
+    public RegisterUser toModel(RegisterUserRequestDTO dto) {
+        RegisterUser registerUser = new RegisterUser();
+        registerUser.setEmail(dto.getEmail());
+        registerUser.setPassword(dto.getPassword());
+        return registerUser;
+    }
 
-    UserResponseDTO toDto(User user);
+    public RegisterUserResponseDTO toDto(RegisterUser registerUser) {
+        RegisterUserResponseDTO dto = new RegisterUserResponseDTO();
+        dto.setId(registerUser.getId());
+        dto.setEmail(registerUser.getEmail());
+        return dto;
+    }
 }
