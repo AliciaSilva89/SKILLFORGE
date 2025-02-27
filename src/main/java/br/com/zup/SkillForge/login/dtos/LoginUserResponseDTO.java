@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseDTO {
+public class LoginUserResponseDTO {
 
     private Long id;
     private String email;
     private String token;
 
-    private UserResponseDTO(Builder builder) {
+    private LoginUserResponseDTO(Builder builder) {
         this.id = builder.id;
         this.email = builder.email;
         this.token = builder.token;
@@ -39,8 +39,8 @@ public class UserResponseDTO {
             return this;
         }
 
-        public UserResponseDTO build() {
-            return new UserResponseDTO(this);
+        public LoginUserResponseDTO build() {
+            return new LoginUserResponseDTO(this);
         }
     }
 }
