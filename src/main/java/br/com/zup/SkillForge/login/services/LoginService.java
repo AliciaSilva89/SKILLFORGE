@@ -1,6 +1,8 @@
 package br.com.zup.SkillForge.login.services;
 
 import br.com.zup.SkillForge.infras.ResourceNotFoundException;
+import br.com.zup.SkillForge.infras.security.JwtUtil;
+import br.com.zup.SkillForge.infras.security.PasswordUtil;
 import br.com.zup.SkillForge.login.dtos.LoginUserRequestDTO;
 import br.com.zup.SkillForge.login.dtos.LoginUserResponseDTO;
 import br.com.zup.SkillForge.login.models.LoginUser;
@@ -29,6 +31,7 @@ public class LoginService {
         this.loginMapper = loginMapper;
         this.registerRepository = registerRepository;
     }
+
     public LoginUserResponseDTO login(LoginUserRequestDTO loginUserRequestDTO) {
         RegisterUser registeredUser = registerRepository.findByEmail(loginUserRequestDTO.getEmail())
                 .orElseThrow(() -> {
@@ -45,6 +48,20 @@ public class LoginService {
         loginUser = loginRepository.save(loginUser);
         logger.info("User logged in with email: {}", loginUser.getEmail());
         return loginMapper.toDto(loginUser);
+    }
+
+    public String loginWithToken(LoginUserRequestDTO loginUserRequestDTO) {
+        RegisterUser registeredUser = registerRepository.findByEmail(loginUserRequestDTO.getEmail())
+                .orElseThrow(() -> {
+                    return new ResourceNotFoundException("Email not registered");
+                });
+
+        if (!PasswordUtil.verifyPassword(loginUserRequestDTO.getPassword(), registeredUser.getPassword())) {
+            throw new IllegalArgumentException("Invalid email or password");
+        }
+
+        String token = JwtUtil.generateToken(registeredUser.getEmail());
+        return token;
     }
 
     public LoginUserResponseDTO createUser(LoginUserRequestDTO loginUserRequestDTO) {
