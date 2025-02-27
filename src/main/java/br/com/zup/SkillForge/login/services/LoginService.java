@@ -6,6 +6,8 @@ import br.com.zup.SkillForge.login.dtos.LoginUserResponseDTO;
 import br.com.zup.SkillForge.login.models.LoginUser;
 import br.com.zup.SkillForge.login.repositories.LoginRepository;
 import br.com.zup.SkillForge.login.services.mappers.LoginMapper;
+import br.com.zup.SkillForge.register.models.RegisterUser;
+import br.com.zup.SkillForge.register.repositories.RegisterRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,14 +22,33 @@ public class LoginService {
 
     private final LoginRepository loginRepository;
     private final LoginMapper loginMapper;
+    private final RegisterRepository registerRepository;
 
-    public LoginService(LoginRepository loginRepository, LoginMapper loginMapper) {
+    public LoginService(LoginRepository loginRepository, LoginMapper loginMapper, RegisterRepository registerRepository) {
         this.loginRepository = loginRepository;
         this.loginMapper = loginMapper;
+        this.registerRepository = registerRepository;
+    }
+    public LoginUserResponseDTO login(LoginUserRequestDTO loginUserRequestDTO) {
+        RegisterUser registeredUser = registerRepository.findByEmail(loginUserRequestDTO.getEmail())
+                .orElseThrow(() -> {
+                    logger.error("Login failed: email not found - {}", loginUserRequestDTO.getEmail());
+                    return new ResourceNotFoundException("Email not registered");
+                });
+
+        if (!registeredUser.getPassword().equals(loginUserRequestDTO.getPassword())) {
+            logger.error("Login failed: incorrect password for email - {}", loginUserRequestDTO.getEmail());
+            throw new IllegalArgumentException("Invalid email or password");
+        }
+
+        LoginUser loginUser = loginMapper.toModel(loginUserRequestDTO);
+        loginUser = loginRepository.save(loginUser);
+        logger.info("User logged in with email: {}", loginUser.getEmail());
+        return loginMapper.toDto(loginUser);
     }
 
-
     public LoginUserResponseDTO createUser(LoginUserRequestDTO loginUserRequestDTO) {
+
         LoginUser loginUser = loginMapper.toModel(loginUserRequestDTO);
         loginUser = loginRepository.save(loginUser);
         logger.info("User created with id: {}", loginUser.getId());
