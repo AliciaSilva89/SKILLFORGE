@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseDTO {
+public class RegisterUserResponseDTO {
 
     private Long id;
     private String email;
 
-    private UserResponseDTO(Builder builder) {
+    private RegisterUserResponseDTO(Builder builder) {
         this.id = builder.id;
         this.email = builder.email;
     }
@@ -31,8 +31,8 @@ public class UserResponseDTO {
             return this;
         }
 
-        public UserResponseDTO build() {
-            return new UserResponseDTO(this);
+        public RegisterUserResponseDTO build() {
+            return new RegisterUserResponseDTO(this);
         }
     }
 }

@@ -7,10 +7,10 @@ spring:
       enabled: false
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5432/original_skillforge
+    username: moderador
+    password: skillforge25
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -18,5 +18,4 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-  
+        dialect: org.hibernate.dialect.PostgreSQLDialect

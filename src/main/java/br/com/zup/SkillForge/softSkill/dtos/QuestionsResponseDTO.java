@@ -1,4 +1,4 @@
-package br.com.zup.softSkill.dtos;
+package br.com.zup.SkillForge.softSkill.dtos;
 
 import lombok.*;
 

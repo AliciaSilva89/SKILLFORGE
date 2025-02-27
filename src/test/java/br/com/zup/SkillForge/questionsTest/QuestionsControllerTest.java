@@ -1,9 +1,9 @@
 package br.com.zup.SkillForge.questionsTest;
 
-import br.com.zup.softSkill.controllers.QuestionsController;
-import br.com.zup.softSkill.dtos.QuestionsRequestDTO;
-import br.com.zup.softSkill.dtos.QuestionsResponseDTO;
-import br.com.zup.softSkill.services.QuestionsService;
+import br.com.zup.SkillForge.softSkill.controllers.QuestionsController;
+import br.com.zup.SkillForge.softSkill.dtos.QuestionsRequestDTO;
+import br.com.zup.SkillForge.softSkill.dtos.QuestionsResponseDTO;
+import br.com.zup.SkillForge.softSkill.services.QuestionsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

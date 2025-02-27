@@ -10,7 +10,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequestDTO {
+public class RegisterUserRequestDTO {
 
     @Email(message = "Email should be valid.")
     @NotEmpty(message = "Email cannot be empty.")
@@ -27,10 +27,10 @@ public class UserRequestDTO {
 
     @AssertTrue(message = "Passwords do not match.")
     public boolean isPasswordsEqual() {
-        return password != null && password.equals(confirmPassword);
+        return password != null && confirmPassword != null && password.equals(confirmPassword);
     }
 
-    private UserRequestDTO(Builder builder) {
+    private RegisterUserRequestDTO(Builder builder) {
         this.email = builder.email;
         this.password = builder.password;
         this.confirmPassword = builder.confirmPassword;
@@ -56,8 +56,8 @@ public class UserRequestDTO {
             return this;
         }
 
-        public UserRequestDTO build() {
-            return new UserRequestDTO(this);
+        public RegisterUserRequestDTO build() {
+            return new RegisterUserRequestDTO(this);
         }
     }
 }

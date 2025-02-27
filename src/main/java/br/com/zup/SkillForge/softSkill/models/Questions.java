@@ -1,4 +1,4 @@
-package br.com.zup.softSkill.models;
+package br.com.zup.SkillForge.softSkill.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -36,10 +36,4 @@ public class Questions {
     public Questions() {
     }
 
-    public Questions(String title, String optionA, String optionB, String optionC) {
-        this.title = title;
-        this.optionA = optionA;
-        this.optionB = optionB;
-        this.optionC = optionC;
-    }
 }
