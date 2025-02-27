@@ -7,7 +7,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequestDTO {
+public class LoginUserRequestDTO {
 
     @Email(message = "Email should be valid.")
     @NotEmpty(message = "Email cannot be empty.")
@@ -16,7 +16,7 @@ public class UserRequestDTO {
     @NotEmpty(message = "Password cannot be empty.")
     private String password;
 
-    private UserRequestDTO(Builder builder) {
+    private LoginUserRequestDTO(Builder builder) {
         this.email = builder.email;
         this.password = builder.password;
     }
@@ -35,8 +35,8 @@ public class UserRequestDTO {
             return this;
         }
 
-        public UserRequestDTO build() {
-            return new UserRequestDTO(this);
+        public LoginUserRequestDTO build() {
+            return new LoginUserRequestDTO(this);
         }
     }
 }

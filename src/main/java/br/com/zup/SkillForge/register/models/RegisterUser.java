@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class User {
+public class RegisterUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,9 +33,9 @@ public class User {
         return password != null && password.equals(confirmPassword);
     }
 
-    public User() {}
+    public RegisterUser() {}
 
-    public User(String email, String password, String confirmPassword) {
+    public RegisterUser(String email, String password, String confirmPassword) {
         this.email = email;
         this.password = password;
         this.confirmPassword = confirmPassword;

@@ -7,7 +7,8 @@ import lombok.Data;
 
 @Data
 @Entity
-public class User {
+@Table(name = "Login")
+public class LoginUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,9 +21,9 @@ public class User {
     @NotEmpty(message = "Password cannot be empty.")
     private String password;
 
-    public User() {}
+    public LoginUser() {}
 
-    public User(String email, String password) {
+    public LoginUser(String email, String password) {
         this.email = email;
         this.password = password;
     }

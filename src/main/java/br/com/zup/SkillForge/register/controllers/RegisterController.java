@@ -1,7 +1,7 @@
 package br.com.zup.SkillForge.register.controllers;
 
-import br.com.zup.SkillForge.register.dtos.UserRequestDTO;
-import br.com.zup.SkillForge.register.dtos.UserResponseDTO;
+import br.com.zup.SkillForge.register.dtos.RegisterUserRequestDTO;
+import br.com.zup.SkillForge.register.dtos.RegisterUserResponseDTO;
 import br.com.zup.SkillForge.register.services.RegisterService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -23,37 +23,37 @@ public class RegisterController {
     private RegisterService registerService;
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> create(@RequestBody @Valid UserRequestDTO requestDTO) {
+    public ResponseEntity<RegisterUserResponseDTO> create(@RequestBody @Valid RegisterUserRequestDTO requestDTO) {
         if (!requestDTO.isPasswordsEqual()) {
             logger.error("Password and confirmation do not match for user with email: {}", requestDTO.getEmail());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        UserResponseDTO responseDTO = registerService.createUser(requestDTO);
+        RegisterUserResponseDTO responseDTO = registerService.createUser(requestDTO);
         logger.info("User created with email: {}", requestDTO.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> update(@PathVariable Long id, @RequestBody @Valid UserRequestDTO requestDTO) {
+    public ResponseEntity<RegisterUserResponseDTO> update(@PathVariable Long id, @RequestBody @Valid RegisterUserRequestDTO requestDTO) {
         if (!requestDTO.isPasswordsEqual()) {
             logger.error("Password and confirmation do not match for user with email: {}", requestDTO.getEmail());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        UserResponseDTO responseDTO = registerService.updateUser(id, requestDTO);
+        RegisterUserResponseDTO responseDTO = registerService.updateUser(id, requestDTO);
         logger.info("User updated with id: {}", id);
         return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> listUsers() {
-        List<UserResponseDTO> responseDTOList = registerService.listUsers();
+    public ResponseEntity<List<RegisterUserResponseDTO>> listUsers() {
+        List<RegisterUserResponseDTO> responseDTOList = registerService.listUsers();
         logger.info("Listing all users");
         return ResponseEntity.ok(responseDTOList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
-        UserResponseDTO responseDTO = registerService.getUserById(id);
+    public ResponseEntity<RegisterUserResponseDTO> getUserById(@PathVariable Long id) {
+        RegisterUserResponseDTO responseDTO = registerService.getUserById(id);
         logger.info("Fetching user with id: {}", id);
         return ResponseEntity.ok(responseDTO);
     }
