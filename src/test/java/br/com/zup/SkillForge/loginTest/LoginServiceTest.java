@@ -1,9 +1,7 @@
 package br.com.zup.SkillForge.loginTest;
 
-import br.com.zup.SkillForge.infras.ResourceNotFoundException;
+import br.com.zup.SkillForge.infras.security.PasswordUtil;
 import br.com.zup.SkillForge.login.dtos.LoginUserRequestDTO;
-import br.com.zup.SkillForge.login.dtos.LoginUserResponseDTO;
-import br.com.zup.SkillForge.login.models.LoginUser;
 import br.com.zup.SkillForge.login.repositories.LoginRepository;
 import br.com.zup.SkillForge.login.services.LoginService;
 import br.com.zup.SkillForge.login.services.mappers.LoginMapper;
@@ -14,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import br.com.zup.SkillForge.infras.security.JwtUtil;
 
 import java.util.Optional;
 
@@ -40,70 +39,43 @@ public class LoginServiceTest {
     }
 
     @Test
-    public void testLoginSuccess() {
+    public void testLoginWithJwtSuccess() {
         String email = "test@example.com";
         String password = "password123";
+        String hashedPassword = PasswordUtil.hashPassword(password);
         LoginUserRequestDTO loginUserRequestDTO = new LoginUserRequestDTO(email, password);
 
         RegisterUser registeredUser = new RegisterUser();
         registeredUser.setEmail(email);
-        registeredUser.setPassword(password);
-
-        LoginUser loginUser = new LoginUser();
-        loginUser.setEmail(email);
-        loginUser.setPassword(password);
-
-        LoginUserResponseDTO loginUserResponseDTO = new LoginUserResponseDTO();
-        loginUserResponseDTO.setEmail(email);
+        registeredUser.setPassword(hashedPassword);
 
         when(registerRepository.findByEmail(email)).thenReturn(Optional.of(registeredUser));
-        when(loginMapper.toModel(loginUserRequestDTO)).thenReturn(loginUser);
-        when(loginRepository.save(loginUser)).thenReturn(loginUser);
-        when(loginMapper.toDto(loginUser)).thenReturn(loginUserResponseDTO);
 
-        LoginUserResponseDTO result = loginService.login(loginUserRequestDTO);
+        String token = loginService.loginWithToken(loginUserRequestDTO);
 
-        assertNotNull(result);
-        assertEquals(email, result.getEmail());
+        assertNotNull(token);
+        assertTrue(JwtUtil.validateToken(token, email));
         verify(registerRepository, times(1)).findByEmail(email);
-        verify(loginRepository, times(1)).save(loginUser);
     }
 
     @Test
-    public void testLoginEmailNotFound() {
-        String email = "notfound@example.com";
-        String password = "password123";
-        LoginUserRequestDTO loginUserRequestDTO = new LoginUserRequestDTO(email, password);
-
-        when(registerRepository.findByEmail(email)).thenReturn(Optional.empty());
-
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            loginService.login(loginUserRequestDTO);
-        });
-
-        assertEquals("Email not registered", exception.getMessage());
-        verify(registerRepository, times(1)).findByEmail(email);
-        verify(loginRepository, never()).save(any());
-    }
-
-    @Test
-    public void testLoginInvalidPassword() {
+    public void testLoginWithJwtInvalidPassword() {
         String email = "test@example.com";
         String password = "wrongpassword";
+        String hashedPassword = PasswordUtil.hashPassword("correctpassword");
         LoginUserRequestDTO loginUserRequestDTO = new LoginUserRequestDTO(email, password);
 
         RegisterUser registeredUser = new RegisterUser();
         registeredUser.setEmail(email);
-        registeredUser.setPassword("correctpassword");
+        registeredUser.setPassword(hashedPassword);
 
         when(registerRepository.findByEmail(email)).thenReturn(Optional.of(registeredUser));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            loginService.login(loginUserRequestDTO);
+            loginService.loginWithToken(loginUserRequestDTO);
         });
 
         assertEquals("Invalid email or password", exception.getMessage());
         verify(registerRepository, times(1)).findByEmail(email);
-        verify(loginRepository, never()).save(any());
     }
 }
