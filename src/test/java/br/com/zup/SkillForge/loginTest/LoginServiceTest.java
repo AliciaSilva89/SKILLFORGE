@@ -1,9 +1,14 @@
 package br.com.zup.SkillForge.loginTest;
 
+<<<<<<< HEAD
 import br.com.zup.SkillForge.infras.ResourceNotFoundException;
 import br.com.zup.SkillForge.login.dtos.LoginUserRequestDTO;
 import br.com.zup.SkillForge.login.dtos.LoginUserResponseDTO;
 import br.com.zup.SkillForge.login.models.LoginUser;
+=======
+import br.com.zup.SkillForge.infras.security.PasswordUtil;
+import br.com.zup.SkillForge.login.dtos.LoginUserRequestDTO;
+>>>>>>> 9012963f7a67092b6b281232477fb53be564dce6
 import br.com.zup.SkillForge.login.repositories.LoginRepository;
 import br.com.zup.SkillForge.login.services.LoginService;
 import br.com.zup.SkillForge.login.services.mappers.LoginMapper;
@@ -14,6 +19,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+<<<<<<< HEAD
+=======
+import br.com.zup.SkillForge.infras.security.JwtUtil;
+>>>>>>> 9012963f7a67092b6b281232477fb53be564dce6
 
 import java.util.Optional;
 
@@ -40,13 +49,21 @@ public class LoginServiceTest {
     }
 
     @Test
+<<<<<<< HEAD
     public void testLoginSuccess() {
         String email = "test@example.com";
         String password = "password123";
+=======
+    public void testLoginWithJwtSuccess() {
+        String email = "test@example.com";
+        String password = "password123";
+        String hashedPassword = PasswordUtil.hashPassword(password);
+>>>>>>> 9012963f7a67092b6b281232477fb53be564dce6
         LoginUserRequestDTO loginUserRequestDTO = new LoginUserRequestDTO(email, password);
 
         RegisterUser registeredUser = new RegisterUser();
         registeredUser.setEmail(email);
+<<<<<<< HEAD
         registeredUser.setPassword(password);
 
         LoginUser loginUser = new LoginUser();
@@ -90,20 +107,49 @@ public class LoginServiceTest {
     public void testLoginInvalidPassword() {
         String email = "test@example.com";
         String password = "wrongpassword";
+=======
+        registeredUser.setPassword(hashedPassword);
+
+        when(registerRepository.findByEmail(email)).thenReturn(Optional.of(registeredUser));
+
+        String token = loginService.loginWithToken(loginUserRequestDTO);
+
+        assertNotNull(token);
+        assertTrue(JwtUtil.validateToken(token, email));
+        verify(registerRepository, times(1)).findByEmail(email);
+    }
+
+    @Test
+    public void testLoginWithJwtInvalidPassword() {
+        String email = "test@example.com";
+        String password = "wrongpassword";
+        String hashedPassword = PasswordUtil.hashPassword("correctpassword");
+>>>>>>> 9012963f7a67092b6b281232477fb53be564dce6
         LoginUserRequestDTO loginUserRequestDTO = new LoginUserRequestDTO(email, password);
 
         RegisterUser registeredUser = new RegisterUser();
         registeredUser.setEmail(email);
+<<<<<<< HEAD
         registeredUser.setPassword("correctpassword");
+=======
+        registeredUser.setPassword(hashedPassword);
+>>>>>>> 9012963f7a67092b6b281232477fb53be564dce6
 
         when(registerRepository.findByEmail(email)).thenReturn(Optional.of(registeredUser));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+<<<<<<< HEAD
             loginService.login(loginUserRequestDTO);
+=======
+            loginService.loginWithToken(loginUserRequestDTO);
+>>>>>>> 9012963f7a67092b6b281232477fb53be564dce6
         });
 
         assertEquals("Invalid email or password", exception.getMessage());
         verify(registerRepository, times(1)).findByEmail(email);
+<<<<<<< HEAD
         verify(loginRepository, never()).save(any());
+=======
+>>>>>>> 9012963f7a67092b6b281232477fb53be564dce6
     }
 }
