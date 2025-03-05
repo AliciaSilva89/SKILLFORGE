@@ -10,87 +10,96 @@ import Button from "@/components/ui/Button";
 interface Question {
   question: string;
   options: string[];
-  correct_answer: number; // Índice da resposta correta
+  correct_answer: number;
 }
+
+const softSkillsTitles = [
+  "Empatia", "Comunicacao inclusiva", "Pessoas negras", "Respeito as diferencas",
+  "Vies Inconsciente", "Interseccionalidade", "Diversidade Cultural",
+  "Equidade De Genero", "Inclusao De PCD", "Racial E Etnica",
+  "LGBTQIA E Inclusao", "Socioeconomica", "Religiao E Espiritualidade",
+  "Saude Mental E Inclusao",
+];
+
+const hardSkillsTitles = [
+  "Funcoes Simples", "Comentarios Uteis", "Codigo Legivel", "Nomes Significativos",
+  "Formatacao de Codigo", "Principio DRY", "Principio SRP", "Tratamente de Erros",
+  "Reducao de Dependencias", "Testabilidade", "Principio KISS",
+  "Principio YAGNI", "Refatoracao Continua", "Boas Praticas de POO",
+];
 
 const GamePage: React.FC = () => {
   const searchParams = useSearchParams();
   const title = searchParams?.get("title");
 
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [selectedOption, setSelectedOption] = useState<string>(""); // Armazena a opção selecionada
+  const [selectedOption, setSelectedOption] = useState<string>(""); 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<boolean[]>([]); // Respostas corretas ou incorretas para cada pergunta
-  const [isGameFinished, setIsGameFinished] = useState(false); // Flag para indicar se o jogo terminou
-  const [hasFetched, setHasFetched] = useState(false); // Estado para garantir que a requisição é feita uma vez
+  const [answers, setAnswers] = useState<boolean[]>([]);
+  const [isGameFinished, setIsGameFinished] = useState(false);
+  const [hasFetched, setHasFetched] = useState(false);
 
   useEffect(() => {
-    if (!title || hasFetched) {
-      return; // Se o título não for fornecido ou a requisição já foi feita, não faz nada
+    if (!title || hasFetched) return;
+
+    setHasFetched(true);
+
+    // Verifica se o título pertence a Hard Skills ou Soft Skills
+    const category = softSkillsTitles.includes(title)
+      ? "softskills"
+      : hardSkillsTitles.includes(title)
+      ? "hardskills"
+      : null;
+
+    if (!category) {
+      console.error("Título não reconhecido:", title);
+      return;
     }
 
-    setHasFetched(true); // Marca que a requisição foi feita
-
-    // Envia a requisição com o título para obter as perguntas
-    fetch(`http://127.0.0.1:8000/game/questions?title=${title}`)
+    fetch(`http://127.0.0.1:8000/${category}/questions?title=${title}`)
       .then((res) => res.json())
       .then((data) => setQuestions(data.questions))
       .catch((err) => console.error("Erro ao buscar perguntas:", err));
   }, [title, hasFetched]);
 
-  if (questions.length === 0) {
+  if (questions.length === 0 || !questions[currentQuestionIndex]) {
     return <div className="text-center text-lg">Carregando perguntas...</div>;
   }
 
   const currentQuestion = questions[currentQuestionIndex];
 
-  // Função para verificar se a resposta está correta
   const checkAnswer = (selectedOption: string) => {
     const correctOption = currentQuestion.options[currentQuestion.correct_answer];
     const isCorrect = selectedOption === correctOption;
     setAnswers((prevAnswers) => [...prevAnswers, isCorrect]);
   };
 
-  // Função para avançar para a próxima pergunta
   const nextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      setIsGameFinished(true); // Termina o jogo quando todas as perguntas forem respondidas
-      sendFeedback(); // Envia o feedback quando o jogo termina
+      setIsGameFinished(true);
+      sendFeedback();
     }
   };
 
-  // Função para calcular a pontuação final
   const getScore = () => answers.filter((answer) => answer).length;
 
-  // Função para enviar o feedback à API externa
   const sendFeedback = () => {
     const score = getScore();
-
     fetch("http://127.0.0.1:8000/game/feedback", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title,
-        score,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, score }),
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log("Feedback enviado com sucesso:", data);
-      })
-      .catch((err) => {
-        console.error("Erro ao enviar feedback:", err);
-      });
+      .then((data) => console.log("Feedback enviado:", data))
+      .catch((err) => console.error("Erro ao enviar feedback:", err));
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col relative">
       <Navbar />
-
       <div
         className="flex-grow bg-cover bg-center flex justify-center items-center p-4"
         style={{ backgroundImage: 'url("/seu-background.jpg")' }}
@@ -131,7 +140,6 @@ const GamePage: React.FC = () => {
                 <Button
                   className="bg-[#0077B6] text-white w-full max-w-[200px] h-[50px] rounded-[10px] text-lg hover:bg-[#005b80]"
                   onClick={() => {
-                    // Verifica a resposta antes de passar para a próxima
                     checkAnswer(selectedOption);
                     nextQuestion();
                   }}
@@ -150,7 +158,6 @@ const GamePage: React.FC = () => {
           )}
         </div>
       </div>
-
       <Footer />
       <HelpButton />
     </div>

@@ -33,9 +33,20 @@ const Home: React.FC = () => {
   ];
 
   const hardSkillsButtons = [
-    "Funções Simples",
-    "Comentários Necessários",
-    "Código Legível",
+    "Funcoes Simples",
+    "Comentarios Uteis",
+    "Codigo Legivel",
+    "Nomes Significativos",
+    "Formatacao de Codigo",
+    "Principio DRY",
+    "Principio SRP",
+    "Tratamente de Erros",
+    "Reducao de Dependencias",
+    "Testabilidade",
+    "Principio KISS",
+    "Principio YAGNI",
+    "Refatoracao Continua",
+    "Boas Praticas de POO",
   ];
 
   const renderButtons = (buttons: string[]) => {
