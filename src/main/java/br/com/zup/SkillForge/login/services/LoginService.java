@@ -1,8 +1,11 @@
 package br.com.zup.SkillForge.login.services;
 
 import br.com.zup.SkillForge.infras.ResourceNotFoundException;
+<<<<<<< HEAD
+=======
 import br.com.zup.SkillForge.infras.security.JwtUtil;
 import br.com.zup.SkillForge.infras.security.PasswordUtil;
+>>>>>>> 9012963f7a67092b6b281232477fb53be564dce6
 import br.com.zup.SkillForge.login.dtos.LoginUserRequestDTO;
 import br.com.zup.SkillForge.login.dtos.LoginUserResponseDTO;
 import br.com.zup.SkillForge.login.models.LoginUser;
@@ -31,7 +34,10 @@ public class LoginService {
         this.loginMapper = loginMapper;
         this.registerRepository = registerRepository;
     }
+<<<<<<< HEAD
+=======
 
+>>>>>>> 9012963f7a67092b6b281232477fb53be564dce6
     public LoginUserResponseDTO login(LoginUserRequestDTO loginUserRequestDTO) {
         RegisterUser registeredUser = registerRepository.findByEmail(loginUserRequestDTO.getEmail())
                 .orElseThrow(() -> {
@@ -50,6 +56,8 @@ public class LoginService {
         return loginMapper.toDto(loginUser);
     }
 
+<<<<<<< HEAD
+=======
     public String loginWithToken(LoginUserRequestDTO loginUserRequestDTO) {
         RegisterUser registeredUser = registerRepository.findByEmail(loginUserRequestDTO.getEmail())
                 .orElseThrow(() -> {
@@ -64,6 +72,7 @@ public class LoginService {
         return token;
     }
 
+>>>>>>> 9012963f7a67092b6b281232477fb53be564dce6
     public LoginUserResponseDTO createUser(LoginUserRequestDTO loginUserRequestDTO) {
 
         LoginUser loginUser = loginMapper.toModel(loginUserRequestDTO);
