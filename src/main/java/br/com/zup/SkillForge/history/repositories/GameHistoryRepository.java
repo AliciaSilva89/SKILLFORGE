@@ -1,4 +1,4 @@
-package br.com.zup.SkillForge;
+package br.com.zup.SkillForge.history.repositories;
 
 import br.com.zup.SkillForge.history.model.GameHistory;
 import org.springframework.data.jpa.repository.JpaRepository;

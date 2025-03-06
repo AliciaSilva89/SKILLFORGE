@@ -1,4 +1,4 @@
-package br.com.zup.SkillForge.history;
+package br.com.zup.SkillForge.history.services.mappers;
 
 import br.com.zup.SkillForge.history.dtos.GamerHistoryRequestDTO;
 import br.com.zup.SkillForge.history.dtos.GamerHistoryResponseDTO;
