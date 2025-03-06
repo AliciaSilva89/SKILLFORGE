@@ -1,17 +1,16 @@
-package br.com.zup.SkillForge.history;
+package br.com.zup.SkillForge.history.model;
 
 import br.com.zup.SkillForge.login.models.LoginUser;
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
+import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 @Entity
-@Table(name = "players")
 public class Player extends LoginUser {
 
     private int ranking;
@@ -19,8 +18,6 @@ public class Player extends LoginUser {
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<GameHistory> gameHistory;
-
-    public Player() {}
 
     public Player(String email, String password, int ranking, int score) {
         super(email, password);
