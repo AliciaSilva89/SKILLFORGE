@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlayerResponseDTO {
+
     private int ranking;
     private int score;
-}
 
+}

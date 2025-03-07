@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginUserRequestDTO {
-
     @Email(message = "Email should be valid.")
     @NotEmpty(message = "Email cannot be empty.")
     private String email;

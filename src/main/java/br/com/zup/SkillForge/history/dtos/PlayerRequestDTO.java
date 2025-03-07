@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlayerRequestDTO {
-
     @Min(value = 0, message = "Ranking must be at least 0.")
     private int ranking;
 
