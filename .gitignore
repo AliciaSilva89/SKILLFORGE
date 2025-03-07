@@ -35,6 +35,10 @@ build/
 #Variavel de Ambiente#
 .env
 
+
+
+
+
 Front_Next/.next*
 # dependencies
 /node_modules
