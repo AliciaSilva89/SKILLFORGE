@@ -4,9 +4,9 @@ import br.com.zup.SkillForge.login.dtos.LoginUserRequestDTO;
 import br.com.zup.SkillForge.login.dtos.LoginUserResponseDTO;
 import br.com.zup.SkillForge.login.services.LoginService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,26 +14,21 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/login")
+@RequiredArgsConstructor
 public class LoginController {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
-    private final  LoginService loginService;
-
-    public LoginController(LoginService loginService) {
-        this.loginService = loginService;
-    }
+    private final LoginService loginService;
 
     @PostMapping
     public ResponseEntity<LoginUserResponseDTO> create(@RequestBody @Valid LoginUserRequestDTO requestDTO) {
         LoginUserResponseDTO responseDTO = loginService.createUser(requestDTO);
         logger.info("User created with email: {}", requestDTO.getEmail());
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        return ResponseEntity.status(201).body(responseDTO);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<LoginUserResponseDTO> update(@PathVariable Long id, @RequestBody @Valid LoginUserRequestDTO requestDTO) {
-
         LoginUserResponseDTO responseDTO = loginService.updateUser(id, requestDTO);
         logger.info("User updated with id: {}", id);
         return ResponseEntity.ok(responseDTO);
