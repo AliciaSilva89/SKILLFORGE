@@ -35,9 +35,7 @@ build/
 #Variavel de Ambiente#
 .env
 
-
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
+Front_Next/.next*
 # dependencies
 /node_modules
 /.pnp
@@ -75,3 +73,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 node_modules
+
+.env*
