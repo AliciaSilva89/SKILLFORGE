@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "../components/ui/Navbar";
 import Footer from "../components/ui/Footer";
@@ -9,7 +9,24 @@ import Button from "../components/ui/Button";
 
 const Home: React.FC = () => {
   const [activeTab, setActiveTab] = useState("softskills");
+  const [userInfo, setUserInfo] = useState<{ email: string | null; id: number | null }>({
+    email: null,
+    id: null,
+  });
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    const userEmail = localStorage.getItem("userEmail");
+    const userId = localStorage.getItem("userId");
+
+    if (!userEmail || !userId) {
+      router.push("/auth/login");
+    } else {
+      setUserInfo({ email: userEmail, id: parseInt(userId, 10) });
+    }
+    setLoading(false);
+  }, [router]);
 
   const handleGameStart = (title: string) => {
     router.push(`/game?title=${title}`);
@@ -33,9 +50,20 @@ const Home: React.FC = () => {
   ];
 
   const hardSkillsButtons = [
-    "Funções Simples",
-    "Comentários Necessários",
-    "Código Legível",
+    "Funcoes Simples",
+    "Comentarios Uteis",
+    "Codigo Legivel",
+    "Nomes Significativos",
+    "Formatacao de Codigo",
+    "Principio DRY",
+    "Principio SRP",
+    "Tratamente de Erros",
+    "Reducao de Dependencias",
+    "Testabilidade",
+    "Principio KISS",
+    "Principio YAGNI",
+    "Refatoracao Continua",
+    "Boas Praticas de POO",
   ];
 
   const renderButtons = (buttons: string[]) => {
@@ -50,6 +78,17 @@ const Home: React.FC = () => {
       </Button>
     ));
   };
+
+  // Extrai o nome do usuário (antes do @)
+  const username = userInfo.email ? userInfo.email.split("@")[0] : "";
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <p>Carregando...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col relative">
@@ -73,6 +112,11 @@ const Home: React.FC = () => {
         >
           Hard Skills
         </button>
+      </div>
+
+      {/* Barra de boas-vindas com fundo igual ao da Navbar */}
+      <div className="bg-[#0077B6] py-1">
+        <p className="text-white text-xl text-center">Bem-vindo, {username}</p>
       </div>
 
       <div className="p-8 flex-grow">

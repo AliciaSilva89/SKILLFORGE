@@ -8,7 +8,6 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Implemente aqui a lógica de autenticação (ex: chamada de API)
     console.log("Tentativa de login:", { email, password });
   };
 

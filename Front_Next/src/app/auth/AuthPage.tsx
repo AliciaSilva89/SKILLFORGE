@@ -1,25 +1,59 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import HelpButton from "@/components/ui/HelpButton";
+import axios, { AxiosError } from "axios";
 
 const AuthPage: React.FC<{ type: "login" | "register" }> = ({ type }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (type === "register" && password !== confirmPassword) {
       setErrorMessage("As senhas não coincidem!");
       return;
     }
+    if (type === "register" && password.length < 8) {
+      setErrorMessage("Precisa ser maior que 8 caracteres!");
+      return;
+    }
     setErrorMessage("");
-    console.log(`${type} realizado com:`, { email, password });
+    setLoading(true);
+
+    try {
+      if (type === "login") {
+        const response = await axios.post("http://18.231.117.6:8000/login", { email, password });
+        if (response.status === 200) {
+          const { id, email } = response.data;
+          localStorage.setItem("userId", id);
+          localStorage.setItem("userEmail", email);
+
+          router.push("/");
+        }
+      } else if (type === "register") {
+        const response = await axios.post("http://18.231.117.6:8000/users", { email, password, confirmPassword });
+        if (response.status === 200) {
+          router.push("/auth/login");
+        }
+      }
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      setErrorMessage(
+        axiosError.response?.data?.message || "Erro ao processar a solicitação. Tente novamente."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -74,8 +108,9 @@ const AuthPage: React.FC<{ type: "login" | "register" }> = ({ type }) => {
             <button
               type="submit"
               className="w-full bg-[#FFA500] text-white p-3 rounded-lg font-bold hover:bg-[#FF6F00] transition text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-white"
+              disabled={loading}
             >
-              {type === "login" ? "Entrar" : "Cadastrar"}
+              {loading ? "Carregando..." : type === "login" ? "Entrar" : "Cadastrar"}
             </button>
           </form>
           {type === "login" ? (

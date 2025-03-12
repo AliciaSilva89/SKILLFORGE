@@ -2,15 +2,17 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Navbar: React.FC = () => {
   const router = useRouter();
   const [showMenu, setShowMenu] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
+  // Verificando o token ao carregar o componente
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
+    const token = localStorage.getItem("userEmail");
+    setIsAuthenticated(!!token); // Se o token existe, o usuário está autenticado
   }, []);
 
   const toggleMenu = () => setShowMenu(!showMenu);
@@ -23,7 +25,6 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="bg-[#FFA500] shadow-[0_6px_2px_rgba(0,0,0,0.3)] h-[60px] flex items-center justify-between px-8">
-      {/* Logo com Ícone */}
       <h1
         className="text-white text-xl md:text-2xl font-bold cursor-pointer flex items-center space-x-2"
         onClick={() => router.push("/")}
@@ -32,14 +33,20 @@ const Navbar: React.FC = () => {
             router.push("/");
           }
         }}
-        tabIndex={0} // Permite acessar com o teclado
+        tabIndex={0}
         aria-label="Ir para a página inicial"
       >
-        <img src="/SFlogo.svg" alt="Ícone SkillForge" className="w-12 h-12" />
+        <Image
+          src="/SFlogo.svg"
+          alt="Ícone SkillForge"
+          width={48}
+          height={48}
+          priority
+      />
+
         <span>SkillForge</span>
       </h1>
 
-      {/* Link Sobre Nós */}
       <p
         className="text-white text-xl md:text-2xl font-bold cursor-pointer"
         onClick={() => router.push("/about")}
@@ -48,22 +55,21 @@ const Navbar: React.FC = () => {
             router.push("/about");
           }
         }}
-        tabIndex={0} // Permite acessar com o teclado
+        tabIndex={0}
         aria-label="Sobre Nós"
       >
         Sobre Nós
       </p>
 
-      {/* Menu de Usuário */}
       <div className="relative flex items-center space-x-4">
         <button
           className="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center cursor-pointer"
           onClick={toggleMenu}
-          onKeyDown={handleKeyDown} // Permite que o menu seja aberto pelo teclado
+          onKeyDown={handleKeyDown}
           aria-label={showMenu ? "Fechar menu" : "Abrir menu"}
           aria-expanded={showMenu ? "true" : "false"}
           aria-controls="menu"
-          tabIndex={0} // Permite acessar com o teclado
+          tabIndex={0}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -118,13 +124,13 @@ const Navbar: React.FC = () => {
                   <li
                     className="px-4 py-2 text-white hover:text-[#00B4D8] cursor-pointer"
                     onClick={() => {
-                      localStorage.removeItem("token");
+                      localStorage.removeItem("userEmail");
                       setIsAuthenticated(false);
                       router.push("/");
                     }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
-                        localStorage.removeItem("token");
+                        localStorage.removeItem("userEmail");
                         setIsAuthenticated(false);
                         router.push("/");
                       }
