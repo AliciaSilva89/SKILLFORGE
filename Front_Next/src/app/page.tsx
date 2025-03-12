@@ -17,6 +17,7 @@ const Home: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
+<<<<<<< HEAD
     const userEmail = localStorage.getItem("userEmail");
     const userId = localStorage.getItem("userId");
 
@@ -27,6 +28,16 @@ const Home: React.FC = () => {
     }
     setLoading(false);
   }, [router]);
+=======
+    // Verifica se o token está presente no localStorage
+    const token = localStorage.getItem("token");
+
+    // Se o token não estiver presente, redireciona para a página de login
+    if (!token) {
+      router.push("/auth/login");
+    }
+  }, [router]); // O hook será executado ao carregar a página
+>>>>>>> 8d87d68873921fb1b060998f401d6d9edfb489b4
 
   const handleGameStart = (title: string) => {
     router.push(`/game?title=${title}`);

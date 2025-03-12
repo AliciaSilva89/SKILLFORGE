@@ -4,10 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegisterUser {
 
     @Id
@@ -15,18 +19,13 @@ public class RegisterUser {
     private Long id;
 
     @Email(message = "Email should be valid")
-    @NotEmpty(message = "Email cannot be empty")
     private String email;
 
     @Size(min = 8, message = "Password should have at least 8 characters")
-    @NotEmpty(message = "Password cannot be empty")
     private String password;
 
     @Transient
     @Size(min = 8, message = "Password confirmation should have at least 8 characters")
-    @NotEmpty(message = "Password confirmation cannot be empty")
     private String confirmPassword;
-
-    public RegisterUser() {}
 
 }

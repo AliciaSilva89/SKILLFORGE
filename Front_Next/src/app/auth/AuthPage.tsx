@@ -1,24 +1,40 @@
 "use client";
 
 import React, { useState } from "react";
+<<<<<<< HEAD
 import { useRouter } from "next/navigation";
+=======
+import { useRouter } from "next/navigation";  // Para redirecionar após sucesso
+>>>>>>> 8d87d68873921fb1b060998f401d6d9edfb489b4
 import Link from "next/link";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import HelpButton from "@/components/ui/HelpButton";
+<<<<<<< HEAD
 import axios, { AxiosError } from "axios";
+=======
+import api from "@/utils/api";  // Importando o Axios configurado
+>>>>>>> 8d87d68873921fb1b060998f401d6d9edfb489b4
 
 const AuthPage: React.FC<{ type: "login" | "register" }> = ({ type }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+<<<<<<< HEAD
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+=======
+  const router = useRouter();  // Hook para navegação após sucesso
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+>>>>>>> 8d87d68873921fb1b060998f401d6d9edfb489b4
     if (type === "register" && password !== confirmPassword) {
       setErrorMessage("As senhas não coincidem!");
       return;
@@ -28,6 +44,7 @@ const AuthPage: React.FC<{ type: "login" | "register" }> = ({ type }) => {
       return;
     }
     setErrorMessage("");
+<<<<<<< HEAD
     setLoading(true);
 
     try {
@@ -53,6 +70,25 @@ const AuthPage: React.FC<{ type: "login" | "register" }> = ({ type }) => {
       );
     } finally {
       setLoading(false);
+=======
+
+    try {
+      if (type === "login") {
+        // Lógica de login
+        const response = await api.post("/login", { email, password });
+        if (response.status === 200) {
+          router.push("/home");  // Redirecionar para a home após login
+        }
+      } else if (type === "register") {
+        // Lógica de cadastro
+        const response = await api.post("/users", { email, password, confirmPassword });
+        if (response.status === 201) {
+          router.push("/auth/login");  // Redirecionar para o login após cadastro
+        }
+      }
+    } catch (error: any) {
+      setErrorMessage(error.response?.data?.message || "Erro ao processar a solicitação. Tente novamente.");
+>>>>>>> 8d87d68873921fb1b060998f401d6d9edfb489b4
     }
   };
 

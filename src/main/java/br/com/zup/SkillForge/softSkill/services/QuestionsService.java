@@ -3,9 +3,10 @@ package br.com.zup.SkillForge.softSkill.services;
 import br.com.zup.SkillForge.infras.ResourceNotFoundException;
 import br.com.zup.SkillForge.softSkill.dtos.QuestionsRequestDTO;
 import br.com.zup.SkillForge.softSkill.dtos.QuestionsResponseDTO;
-import br.com.zup.SkillForge.softSkill.services.mappers.QuestionsMapper;
 import br.com.zup.SkillForge.softSkill.models.Questions;
 import br.com.zup.SkillForge.softSkill.repositories.QuestionsRepository;
+import br.com.zup.SkillForge.softSkill.services.mappers.QuestionsMapper;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class QuestionsService {
 
     private static final Logger logger = LoggerFactory.getLogger(QuestionsService.class);
@@ -35,14 +37,16 @@ public class QuestionsService {
 
     public QuestionsResponseDTO updateQuestion(Long id, QuestionsRequestDTO updatedRequest) {
         logger.info("Updating question with id: {}", id);
-        return questionsRepository.findById(id).map(existingQuestion -> {
-            existingQuestion.setTitle(updatedRequest.getTitle());
-            existingQuestion.setOptionA(updatedRequest.getOptionA());
-            existingQuestion.setOptionB(updatedRequest.getOptionB());
-            existingQuestion.setOptionC(updatedRequest.getOptionC());
-            Questions updatedQuestion = questionsRepository.save(existingQuestion);
-            return questionsMapper.toDto(updatedQuestion);
-        }).orElseThrow(() -> new ResourceNotFoundException("Question not found with id " + id));
+        return questionsRepository.findById(id)
+                .map(existingQuestion -> {
+                    existingQuestion.setTitle(updatedRequest.getTitle());
+                    existingQuestion.setOptionA(updatedRequest.getOptionA());
+                    existingQuestion.setOptionB(updatedRequest.getOptionB());
+                    existingQuestion.setOptionC(updatedRequest.getOptionC());
+                    Questions updatedQuestion = questionsRepository.save(existingQuestion);
+                    return questionsMapper.toDto(updatedQuestion);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("Question not found with id " + id));
     }
 
     public void deleteQuestion(Long id) {
@@ -60,10 +64,5 @@ public class QuestionsService {
                 .collect(Collectors.toList());
     }
 
-    public QuestionsResponseDTO getQuestionById(Long id) {
-        logger.info("Getting question with id: {}", id);
-        return questionsRepository.findById(id)
-                .map(questionsMapper::toDto)
-                .orElseThrow(() -> new ResourceNotFoundException("Question not found with id " + id));
-    }
+
 }

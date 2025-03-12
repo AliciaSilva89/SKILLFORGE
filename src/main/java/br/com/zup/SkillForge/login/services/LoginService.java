@@ -8,6 +8,7 @@ import br.com.zup.SkillForge.login.repositories.LoginRepository;
 import br.com.zup.SkillForge.login.services.mappers.LoginMapper;
 import br.com.zup.SkillForge.register.models.RegisterUser;
 import br.com.zup.SkillForge.register.repositories.RegisterRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class LoginService {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
@@ -24,11 +26,6 @@ public class LoginService {
     private final LoginMapper loginMapper;
     private final RegisterRepository registerRepository;
 
-    public LoginService(LoginRepository loginRepository, LoginMapper loginMapper, RegisterRepository registerRepository) {
-        this.loginRepository = loginRepository;
-        this.loginMapper = loginMapper;
-        this.registerRepository = registerRepository;
-    }
     public LoginUserResponseDTO login(LoginUserRequestDTO loginUserRequestDTO) {
         RegisterUser registeredUser = registerRepository.findByEmail(loginUserRequestDTO.getEmail())
                 .orElseThrow(() -> {
@@ -48,7 +45,6 @@ public class LoginService {
     }
 
     public LoginUserResponseDTO createUser(LoginUserRequestDTO loginUserRequestDTO) {
-
         LoginUser loginUser = loginMapper.toModel(loginUserRequestDTO);
         loginUser = loginRepository.save(loginUser);
         logger.info("User created with id: {}", loginUser.getId());

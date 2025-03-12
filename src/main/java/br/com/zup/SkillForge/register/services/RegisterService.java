@@ -1,11 +1,12 @@
 package br.com.zup.SkillForge.register.services;
 
 import br.com.zup.SkillForge.infras.ResourceNotFoundException;
-import br.com.zup.SkillForge.register.models.RegisterUser;
 import br.com.zup.SkillForge.register.dtos.RegisterUserRequestDTO;
 import br.com.zup.SkillForge.register.dtos.RegisterUserResponseDTO;
+import br.com.zup.SkillForge.register.models.RegisterUser;
 import br.com.zup.SkillForge.register.repositories.RegisterRepository;
 import br.com.zup.SkillForge.register.services.mappers.RegisterMapper;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,17 +15,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class RegisterService {
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
 
     private final RegisterRepository registerRepository;
     private final RegisterMapper registerMapper;
-
-    public RegisterService(RegisterRepository registerRepository, RegisterMapper registerMapper) {
-        this.registerRepository = registerRepository;
-        this.registerMapper = registerMapper;
-    }
 
     public RegisterUserResponseDTO createUser(RegisterUserRequestDTO registerUserRequestDTO) {
         validatePasswords(registerUserRequestDTO);
