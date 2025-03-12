@@ -19,10 +19,8 @@ public class RegisterUserRequestDTO {
     private String email;
 
     @Size(min = 8, message = "Password should have at least 8 characters.")
-    @NotEmpty(message = "Password cannot be empty.")
     private String password;
 
-    @NotEmpty(message = "Password confirmation cannot be empty.")
     @Size(min = 8, message = "Password confirmation should have at least 8 characters.")
     private String confirmPassword;
 
