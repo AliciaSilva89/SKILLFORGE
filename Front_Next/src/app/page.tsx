@@ -9,9 +9,26 @@ import Button from "../components/ui/Button";
 
 const Home: React.FC = () => {
   const [activeTab, setActiveTab] = useState("softskills");
+  const [userInfo, setUserInfo] = useState<{ email: string | null; id: number | null }>({
+    email: null,
+    id: null,
+  });
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
+<<<<<<< HEAD
+    const userEmail = localStorage.getItem("userEmail");
+    const userId = localStorage.getItem("userId");
+
+    if (!userEmail || !userId) {
+      router.push("/auth/login");
+    } else {
+      setUserInfo({ email: userEmail, id: parseInt(userId, 10) });
+    }
+    setLoading(false);
+  }, [router]);
+=======
     // Verifica se o token está presente no localStorage
     const token = localStorage.getItem("token");
 
@@ -20,6 +37,7 @@ const Home: React.FC = () => {
       router.push("/auth/login");
     }
   }, [router]); // O hook será executado ao carregar a página
+>>>>>>> 8d87d68873921fb1b060998f401d6d9edfb489b4
 
   const handleGameStart = (title: string) => {
     router.push(`/game?title=${title}`);
@@ -72,6 +90,17 @@ const Home: React.FC = () => {
     ));
   };
 
+  // Extrai o nome do usuário (antes do @)
+  const username = userInfo.email ? userInfo.email.split("@")[0] : "";
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <p>Carregando...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col relative">
       <Navbar />
@@ -94,6 +123,11 @@ const Home: React.FC = () => {
         >
           Hard Skills
         </button>
+      </div>
+
+      {/* Barra de boas-vindas com fundo igual ao da Navbar */}
+      <div className="bg-[#0077B6] py-1">
+        <p className="text-white text-xl text-center">Bem-vindo, {username}</p>
       </div>
 
       <div className="p-8 flex-grow">

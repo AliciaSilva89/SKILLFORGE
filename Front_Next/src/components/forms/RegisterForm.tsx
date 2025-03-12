@@ -51,18 +51,6 @@ const Navbar: React.FC = () => {
                 <>
                   <li
                     className="px-4 py-2 text-white hover:text-[#00B4D8] cursor-pointer"
-                    onClick={() => router.push("/profile")}
-                  >
-                    Meu Perfil
-                  </li>
-                  <li
-                    className="px-4 py-2 text-white hover:text-[#00B4D8] cursor-pointer"
-                    onClick={() => router.push("/settings")}
-                  >
-                    Configurações
-                  </li>
-                  <li
-                    className="px-4 py-2 text-white hover:text-[#00B4D8] cursor-pointer"
                     onClick={() => {
                       localStorage.removeItem("token");
                       setIsAuthenticated(false);

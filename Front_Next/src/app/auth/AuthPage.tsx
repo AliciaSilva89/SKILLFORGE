@@ -1,28 +1,76 @@
 "use client";
 
 import React, { useState } from "react";
+<<<<<<< HEAD
+import { useRouter } from "next/navigation";
+=======
 import { useRouter } from "next/navigation";  // Para redirecionar após sucesso
+>>>>>>> 8d87d68873921fb1b060998f401d6d9edfb489b4
 import Link from "next/link";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import HelpButton from "@/components/ui/HelpButton";
+<<<<<<< HEAD
+import axios, { AxiosError } from "axios";
+=======
 import api from "@/utils/api";  // Importando o Axios configurado
+>>>>>>> 8d87d68873921fb1b060998f401d6d9edfb489b4
 
 const AuthPage: React.FC<{ type: "login" | "register" }> = ({ type }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+<<<<<<< HEAD
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+=======
   const router = useRouter();  // Hook para navegação após sucesso
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+>>>>>>> 8d87d68873921fb1b060998f401d6d9edfb489b4
     if (type === "register" && password !== confirmPassword) {
       setErrorMessage("As senhas não coincidem!");
       return;
     }
+    if (type === "register" && password.length < 8) {
+      setErrorMessage("Precisa ser maior que 8 caracteres!");
+      return;
+    }
     setErrorMessage("");
+<<<<<<< HEAD
+    setLoading(true);
+
+    try {
+      if (type === "login") {
+        const response = await axios.post("http://18.231.117.6:8000/login", { email, password });
+        if (response.status === 200) {
+          const { id, email } = response.data;
+          localStorage.setItem("userId", id);
+          localStorage.setItem("userEmail", email);
+
+          router.push("/");
+        }
+      } else if (type === "register") {
+        const response = await axios.post("http://18.231.117.6:8000/users", { email, password, confirmPassword });
+        if (response.status === 200) {
+          router.push("/auth/login");
+        }
+      }
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      setErrorMessage(
+        axiosError.response?.data?.message || "Erro ao processar a solicitação. Tente novamente."
+      );
+    } finally {
+      setLoading(false);
+=======
 
     try {
       if (type === "login") {
@@ -40,6 +88,7 @@ const AuthPage: React.FC<{ type: "login" | "register" }> = ({ type }) => {
       }
     } catch (error: any) {
       setErrorMessage(error.response?.data?.message || "Erro ao processar a solicitação. Tente novamente.");
+>>>>>>> 8d87d68873921fb1b060998f401d6d9edfb489b4
     }
   };
 
@@ -95,8 +144,9 @@ const AuthPage: React.FC<{ type: "login" | "register" }> = ({ type }) => {
             <button
               type="submit"
               className="w-full bg-[#FFA500] text-white p-3 rounded-lg font-bold hover:bg-[#FF6F00] transition text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-white"
+              disabled={loading}
             >
-              {type === "login" ? "Entrar" : "Cadastrar"}
+              {loading ? "Carregando..." : type === "login" ? "Entrar" : "Cadastrar"}
             </button>
           </form>
           {type === "login" ? (
