@@ -23,6 +23,11 @@ public class QuestionsService {
     private final QuestionsRepository questionsRepository;
     private final QuestionsMapper questionsMapper;
 
+    public QuestionsService(QuestionsRepository questionsRepository, QuestionsMapper questionsMapper) {
+        this.questionsRepository = questionsRepository;
+        this.questionsMapper = questionsMapper;
+    }
+
     public QuestionsResponseDTO createQuestion(QuestionsRequestDTO request) {
         logger.info("Creating a new question");
         Questions question = questionsMapper.toModel(request);

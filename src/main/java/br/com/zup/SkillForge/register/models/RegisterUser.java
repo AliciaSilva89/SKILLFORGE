@@ -19,15 +19,12 @@ public class RegisterUser {
     private Long id;
 
     @Email(message = "Email should be valid")
-    @NotEmpty(message = "Email cannot be empty")
     private String email;
 
-    @NotEmpty(message = "Password cannot be empty")
     @Size(min = 8, message = "Password should have at least 8 characters")
     private String password;
 
     @Transient
-    @NotEmpty(message = "Password confirmation cannot be empty")
     @Size(min = 8, message = "Password confirmation should have at least 8 characters")
     private String confirmPassword;
 
